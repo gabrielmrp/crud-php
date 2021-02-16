@@ -75,7 +75,22 @@ $('.editItem').click(function() {
 
 	var inputs='';
 $(selected_node).find('li').each( function(){
-inputs+="<div class='form-group row my-0'><div class='col-sm-6'><label>"+$(this).attr('verbose_key')+": </label></div><div class='col-sm-6'><span class=''><input class='form-control' type='text' name='"+$(this).attr('key')+"' value='"+$(this).attr('value')+"'></input></span></div></div>";
+
+var input_type = $(this).attr('input_type')
+var verbose_content = $(this).attr('input_type')=='hidden'?'':$(this).attr('verbose_key')+": "
+
+
+inputs+="<div class='form-group row my-0'>"+
+		"<div class='col-sm-6'>"+
+		"<label>"+verbose_content+"</label>"+
+		"</div>"+
+		"<div class='col-sm-6'>"+
+		"<span class=''>"+
+		"<input class='form-control' type='"+input_type+"' name='"+$(this).attr('key')+"' value='"+$(this).attr('value')+"'>"+
+		"</input>"+
+		"</span>"+
+		"</div>"+
+		"</div>";
 })
 $(selected_node).html(
 	"<form name='editform' id='editform' method='post' action='"+entity.replace("es","").replace("s","")+"/"+itemid+"'><fieldset>"
@@ -98,8 +113,8 @@ $('button#'+entity+"-"+itemid).click(function(){
 
 	    	if(result.responseText.search("Cpf/Cnpj já adicionado")>-1)
 	    		{	
-	    			$('#editform').find($('input[name ="cpf_ou_cnpj"]')).css('border-color':'red');
-                    $( "<small>Cpf/Cnpj já existe<br /></small>" ).insertAfter( $('#editform').find($('input[name ="cpf_ou_cnpj"]')));
+	    			$('#editform').find($('input[name ="cpf_ou_cnpj"]')).css({'border-color':'red'});
+                    $( "<small class='error-msg'>Cpf/Cnpj já existe<br /></small>" ).insertAfter( $('#editform').find($('input[name ="cpf_ou_cnpj"]')));
                 }
             else{
             	location.reload();

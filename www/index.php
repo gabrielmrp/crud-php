@@ -27,7 +27,7 @@ $router->get('/', function () {
 
  
 
-$router->get('/ola-{nome}', 'App\Controllers\HomeController::hello');
+$router->get('/dashboard', 'App\Controllers\DevedorController::dashboard');
 
 $router->get('/devedores', 'App\Controllers\DevedorController::listDevedores');
 

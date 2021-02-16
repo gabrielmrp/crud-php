@@ -20,7 +20,7 @@
         <div class="col-md-12">
             <div class="row"> 
                 <div class="col-md-12 m-3 p-2 entity_header">
-                    <h5><?=ucwords($args['entity'])?></h5>
+                    <h5><?=ucwords($args['entity_verbose'])?></h5>
                 </div>
             </div> 
             <?php if(count(array_keys($args['input_types'])) > 0 ){?>
@@ -29,11 +29,11 @@
                      <div class="col-md-12">
                         <div class="card mb-4">
                             <div class="card-header d-inline-flex">
-                                <div class="col-md-8 info" id="<?=$args['entity'].'-'.$item['id']?>">                           
+                                <div class="col-md-8 info" id="<?=$args['entity'].'-'.$item['id']?>">
                                         <ul class="card-header"> 
                                             <?php foreach ($item as $column_name => $column_value) { ?>
-                                                <li verbose_key='<?=$args['verbose_name'][$column_name]?>' key='<?=$column_name?>' value='<?=$column_value?>'><?=$args['verbose_name'][$column_name]." : <span class='itemvalue'>".$column_value."</span>";?>  </li> 
-                                                
+                                                <li verbose_key='<?=$args['verbose_name'][$column_name]?>' key='<?=$column_name?>' value='<?=$column_value?>' input_type='<?=$args['input_types'][$column_name]?>' class='<?=$args['input_types'][$column_name]?>'><?=$args['verbose_name'][$column_name]." : <span class='itemvalue'>".$column_value."</span>";?>  
+                                            </li> 
                                         <?php } ?>
                                     </ul>
                                 </div>
@@ -69,8 +69,7 @@
                     <div class="card col-md-8 " id="addEntity">
                         <h5 class="card-header">
                             Adicionar <?=$args['entity']?>
-                        </h5>
-
+                        </h5> 
                         <div class="card-body">
                             <form action="/<?=$args['entity']?>" method="post" enctype="multipart/form-data" id="form">
                                 <fieldset> 

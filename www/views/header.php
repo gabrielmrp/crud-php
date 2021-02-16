@@ -52,16 +52,16 @@
 <nav>
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#">Home</a>
+            <a href="/dashboard">Home</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="/devedores">Devedor</a>
+            <a href="/devedores">Devedores</a>
         </li>  
-        <?php if ($args['entity'] != 'devedor')
+        <?php if ($args['entity'] != 'devedores' && $args['entity'] != 'dividas')
         {
         ?>
         <li class="breadcrumb-item">
-            <?=ucwords($args['entity'])?>
+            Devedor
         </li>    
         <?php
         }
