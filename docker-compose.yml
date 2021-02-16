@@ -1,16 +1,24 @@
-php:
-  build: .
-  ports:
-   - "80:80"
-   - "443:443"
-  volumes:
-   - ./www:/var/www/html 
-  links:
-   - db
-db:
-  image: mysql:5.7
-  volumes:
-   - /var/lib/mysql
-  environment:
-   - MYSQL_ROOT_PASSWORD=phprs
-   - MYSQL_DATABASE=phprs
+version: '3'
+
+services: 
+  php:
+    build: .
+    ports:
+     - "80:80"
+     - "443:443"
+    volumes:
+     - ./www:/var/www/html 
+    links:
+     - db
+  db:
+    image: mysql:5.6
+    volumes:
+     - /var/lib/mysql
+    environment:
+      MYSQL_DATABASE: 'phpcrud'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - '9908:3306'

@@ -6,7 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Source\\' => array($baseDir . '/www/source'),
-    'CoffeeCode\\Router\\' => array($vendorDir . '/coffeecode/router/src'),
-    'CoffeeCode\\DataLayer\\' => array($vendorDir . '/coffeecode/datalayer/src'),
+    'Phpcrud\\' => array($baseDir . '/src'),
 );

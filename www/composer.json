@@ -1,0 +1,11 @@
+{ 
+    "autoload": {
+        "psr-4": {
+            "Phpcrud\\": "src"
+        }
+    },
+    "require": {
+        "phpunit/phpunit": "^8.3",
+        "illuminate/database": "^8.27"
+    }
+}
