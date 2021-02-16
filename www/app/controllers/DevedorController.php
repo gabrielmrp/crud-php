@@ -136,12 +136,31 @@ class DevedorController extends HomeController
          unset($_POST['submit']);
          $array_to_update = array_merge($_POST,["id"=>$id[1]]);
          
-          
-         $success = Devedor::where('id',$id[1])->update($array_to_update);
- 
-         if ($success) {
-            echo $id." atualizado";
+         $unique_ok =  
+         (Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first() === null);
+
+        
+
+        if ($unique_ok) {
+             $success = Devedor::where('id',$id[1])->update($array_to_update);
+             $mensagem = $_POST["nome"]." adicionado";
+             $resultado = "success";
+
+             echo render_php(dirname(__DIR__, 2).'/views/message.php',
+            ['mensagem'=>$mensagem,
+            'resultado'=>$resultado]);
+         return $this->listDevedores(); 
+
+            
+         } 
+         else{
+            $mensagem =  "Cpf/Cnpj já adicionado";
+            $resultado = "danger";
+            var_dump($mensagem);
+            return die( "HTTP/1.0 404 Not Found" );
          }
+
+
         
     }
 

@@ -66,26 +66,7 @@ $('.calladd').click(function() {
 	}
 });
 
-$('.edit').click(function() {
  
-	var entity = $('#entity').html()
-	var itemid = $(this).attr('itemid') 
-	var form = $("#form_edit_"+itemid)
-	var status = form.find('input[name=status]').attr('value')=="pendente"?"feito":"pendente"
- 	form.find('input[name=status]').attr({'value':status})
- 
-	$.ajax({
-	    url: '../../api/'+entity+'/'+itemid+'/',//window.location.host+'/api/'+entity+'/',
-	    type: 'PUT',
-	    data: form.serialize(),
-	    beforeSend: function (xhr, settings) {
-	        xhr.setRequestHeader("X-CSRFToken", form.attr('csrfmiddlewaretoken'));
-	    },
-	    success: function (arg) {
-	         location.reload()
-	    }
-	});
-	});
 
 $('.editItem').click(function() {
 	var itemid = $(this).attr('itemid') 
@@ -108,28 +89,27 @@ $(this).hide();
 
 $('button#'+entity+"-"+itemid).click(function(){
 	form = $("#editform");
-	console.log(form);
-$.ajax({ 
+ 	form.submit();
+ $.ajax({ 
 	    type: 'POST',
 	    url: form.attr('action'), 
-	    data: form.serialize(),
-	    success: function (arg) {
-	        location.reload()
-	    }
-	});
+	    data: form.serialize(), 
+	    complete: function(result) {
+
+	    	if(result.responseText.search("Cpf/Cnpj já adicionado")>-1)
+	    		{	
+	    			$('#editform').find($('input[name ="cpf_ou_cnpj"]')).css('border-color':'red');
+                    $( "<small>Cpf/Cnpj já existe<br /></small>" ).insertAfter( $('#editform').find($('input[name ="cpf_ou_cnpj"]')));
+                }
+            else{
+            	location.reload();
+            }
+        }
+	}); 
 });
  
 });
 
-
  
-
-
-$('select').click(function() {
-	if($('select').val()=="feito")
-		$('select').css({'background':'#28a745'})
-	else
-		$('select').css({'background':'#ffc107'})
-});
 
 });
