@@ -128,22 +128,23 @@ class DevedorController extends HomeController
          unset($_POST['pessoa']);
          $array_to_update = array_merge($_POST,["id"=>$id[1]]);
          
-         $unique_ok =  
-         Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first() === null ||
-         Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first()->toArray()['id'] === $id[1];
-         
-         $found = Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first()!==null;
+          
+         #Checagem de cpf/cnpj único
+         $found = Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first();
 
-         $unique_ok = True;
-         if($found!=null)
+         
+         if($found!==null)
             if($id[1] !== (string)$found['id']){
                 $unique_ok=False;
             }
-          
-        var_dump($unique_ok); 
+            else{
+                $unique_ok = True;
+            }
+  
+
         if ($unique_ok) {
              $success = Devedor::where('id',$id[1])->update($array_to_update);
-             $mensagem = $_POST["nome"]." adicionado";
+             $mensagem = "Informações de ".$_POST["nome"]." alteradas";
              $resultado = "success";
   
          } 

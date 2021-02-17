@@ -40,11 +40,26 @@
 
   <div class="collapse navbar-collapse" id="conteudo-navbar">
     <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="">
+        <li class="nav-item system_title"> 
               Gerenciamento de Dívidas
           </a>
       </li>
+      <li class="nav-item" >
+         <a class="nav-link" href="/dashboard">
+        Dashboard
+            </a>
+      </li>
+      <li class="nav-item"> 
+        <a class="nav-link" href="/devedores">
+        Devedores
+            </a>
+      </li>
+      <li class="nav-item"> 
+        <a class="nav-link" href="/dividas">
+        Dívidas
+            </a>
+      </li>
+
       
 </ul>           
 </div>

@@ -31,6 +31,18 @@ class HomeController
 	    include($path);
 	} 
 
+	public static function populate()
+    {
+    	$path = dirname(__DIR__, 2).'/populate.php';
+	    include($path);
+	} 
+
+	public static function start()
+    {
+    	HomeController::migrate();
+    	HomeController::populate();
+	} 
+
 	public static function error404()
     {
     	$path = dirname(__DIR__, 2).'/404.php';

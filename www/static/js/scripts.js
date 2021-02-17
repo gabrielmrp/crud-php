@@ -115,7 +115,7 @@ $('button#'+entity+"-"+itemid).click(function(){
 		                    $( "<small class='error-msg'>Cpf/Cnpj já existe<br /></small>" ).insertAfter( $('#editform').find($('input[name ="cpf_ou_cnpj"]')));
 		                }
 		            else{
-		            	 location.reload();
+		            	  location.reload();
 		            }
 		        }
 			}); 

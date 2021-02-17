@@ -35,6 +35,8 @@ $router->delete('/divida/{id}', 'App\Controllers\DividaController::delete','{id}
 $router->post('/dividas', 'App\Controllers\DividaController::insert','{divida}');
 $router->update('/divida/{id}', 'App\Controllers\DividaController::update','{divida}');
 $router->get('/migrate', 'App\Controllers\HomeController::migrate');
+$router->get('/populate', 'App\Controllers\HomeController::populate');
+$router->get('/start', 'App\Controllers\HomeController::start');
 
  
 $result = $router->handler();

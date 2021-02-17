@@ -69,3 +69,7 @@ body{display: inherit;}
 .hidden{display: none;}
 
 .slot{border:3px solid #928def;background:whitesmoke;}
+
+.system_title{margin-top: 0.5rem;
+    margin-left: 2rem;
+    margin-right: 2rem;}
