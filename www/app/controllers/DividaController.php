@@ -7,6 +7,7 @@ require_once(dirname(__DIR__, 2).'/app/controllers/HomeController.php');
 
 use App\Models\Divida;
 use App\Controllers\HomeController;
+use App\Controllers\DevedorController;
 
 class DividaController extends HomeController
 {
@@ -20,6 +21,7 @@ class DividaController extends HomeController
             "valor"=>"Valor (em R$)",
             "data_de_vencimento"=>"Vencimento",
             "devedor_id"=>"Id",
+            "updated"=>"Atualizada",
             "id"=>"Código"  ];
 
          $this->input_types =
@@ -28,6 +30,7 @@ class DividaController extends HomeController
             "valor"=>"number",
             "data_de_vencimento"=>"date",
             "devedor_id"=>"hidden",
+            "updated"=>"hidden",
             "id"=>"hidden"  
             ];   
     }
@@ -43,15 +46,55 @@ class DividaController extends HomeController
     public function listDividas()
     {
     	$path = dirname(__DIR__, 2).'/views/dividas.php';
-        $args = [];
-        $args['elements'] = Divida::all()->toArray();
-        $args['entity'] = 'dividas';
-        $args['entity_verbose'] = 'dívidas';         
-        $args['verbose_name']=$this->verbose_name;
-        $args['input_types']=$this->input_types;   
+
+    	$args = [
+    			'elements'=>Divida::all()->toArray(),
+				'entity'=>'dividas',
+				'entity_verbose'=>'dívidas',   
+				'verbose_name'=>$this->verbose_name,
+				'input_types'=>$this->input_types 
+    			];
+        
   
 
         return render_php($path,$args);
+    }
+
+    public function insert()
+    { 
+    	 
+    	$data = $_POST;
+    	$data['updated']=  date('Y-m-d h:i:s', time());
+  
+        $success = Divida::create($data);
+        $mensagem = $data["nome"]." adicionado";
+        $resultado = "success";
+            
+          
+        echo render_php(dirname(__DIR__, 2).'/views/message.php',
+            ['mensagem'=>$mensagem,
+            'resultado'=>$resultado]);
+  
+    }
+
+        public function update($id)
+    {
+        //$path = dirname(__DIR__, 2).'/views/devedor.php';
+          
+         unset($_POST['submit']);
+         $array_to_update = array_merge($_POST,["id"=>$id[1]]);
+         
+           
+         $success = Divida::where('id',$id[1])->update($array_to_update);
+
+         $mensagem = $_POST["nome"]." adicionado";
+         $resultado = "success";
+
+         echo render_php(dirname(__DIR__, 2).'/views/message.php',
+            ['mensagem'=>$mensagem,
+            'resultado'=>$resultado]);
+         return $this->listDividas(); 
+ 
     }
 
      public function delete($id){

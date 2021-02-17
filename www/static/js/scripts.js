@@ -14,23 +14,7 @@ window.addEventListener("keyup", function(event) {
 });
 
 
-
-$('#add').click(function() {
-	var form = $('#form1');
-	console.log(form);
-	var entity = $('#entity').html(); 
-	$.ajax({
-	    url: entity+'/',
-	    type: 'POST',
-	    data: form.serialize(),
-	    beforeSend: function (xhr, settings) {
-	        xhr.setRequestHeader("X-CSRFToken", form.attr('csrfmiddlewaretoken'));
-	    },
-	    success: function (arg) {
- 			location.reload()
-	    }
-	});
-	});
+ 
 
 $('.delItem').click(function() {
 	delItem = $(this).attr('itemid')
@@ -93,12 +77,13 @@ inputs+="<div class='form-group row my-0'>"+
 		"</div>";
 })
 $(selected_node).html(
-	"<form name='editform' id='editform' method='post' action='"+entity.replace("es","").replace("s","")+"/"+itemid+"'><fieldset>"
+	"<form name='editform' id='editform' method='post' action='/"+entity.replace("es","").replace("s","")+"/"+itemid+"'><fieldset>"
 	+"<div>"+inputs+"</div>"
 	+"<button type='button' class='form-group btn btn-primary btn-xs submit_edit mr-2' id='"+entity+"-"+itemid+"'  name='submit' value='submit'>Salvar</button>"
 	+"<button type='button' class='form-group btn btn-primary btn-xs cancel_edit mr-2' onclick='location.reload()'  name='cancel' value='cancel'>Cancelar</button>"
  	+"</fieldset></form>"
 	);
+ 
 
 $(this).hide();
 
@@ -117,7 +102,7 @@ $('button#'+entity+"-"+itemid).click(function(){
                     $( "<small class='error-msg'>Cpf/Cnpj já existe<br /></small>" ).insertAfter( $('#editform').find($('input[name ="cpf_ou_cnpj"]')));
                 }
             else{
-            	location.reload();
+            	 location.reload();
             }
         }
 	}); 

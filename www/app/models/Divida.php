@@ -10,9 +10,10 @@ class Divida extends Model
     protected $fillable = ['descricao',
 							'valor',
 							'data_de_vencimento',
-							'devedor_id'
+							'devedor_id',
+							'updated'
 						   ];
-    public $timestamps = true;
+    public $timestamps = false;
 
 
 }

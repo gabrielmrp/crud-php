@@ -39,7 +39,7 @@ class DevedorController extends HomeController
             "endereco"=>"text",
             "id"=>"hidden"  
             ];
-    }
+    } 
 
     public function listDevedores()
     {
@@ -68,6 +68,10 @@ class DevedorController extends HomeController
     {
         $path = dirname(__DIR__, 2).'/views/devedor.php';  
         $DividaController = new DividaController(); 
+       
+         
+        $ref_devedor = Devedor::find($id)->first()->toArray()['id'];
+         
 
         $args = [
                 'devedor'=>[
@@ -79,8 +83,9 @@ class DevedorController extends HomeController
                             ],
                 'dividas'=>[
                             'elements'=>Divida::where('devedor_id',$id[1])->get()->toArray(),
-                            'entity'=>'divida',
+                            'entity'=>'dividas',
                             'entity_verbose'=>'dívida',
+                            'ref_devedor'=>$ref_devedor,
                             'verbose_name'=>$DividaController->get_verbose_name(),
                             'input_types'=>$DividaController->get_input_types(), 
                             ]
@@ -92,8 +97,7 @@ class DevedorController extends HomeController
 
     public function insert()
     {
-         $path = dirname(__DIR__, 2).'/views/devedores.php';
-          
+         $path = dirname(__DIR__, 2).'/views/devedores.php';          
          
          $unique_ok =  
          (Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first() === null);
@@ -121,30 +125,40 @@ class DevedorController extends HomeController
         $path = dirname(__DIR__, 2).'/views/devedor.php';
           
          unset($_POST['submit']);
+         unset($_POST['pessoa']);
          $array_to_update = array_merge($_POST,["id"=>$id[1]]);
          
          $unique_ok =  
-         (Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first() === null);
-
+         Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first() === null ||
+         Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first()->toArray()['id'] === $id[1];
          
+         $found = Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first()!==null;
+
+         $unique_ok = True;
+         if($found!=null)
+            if($id[1] !== (string)$found['id']){
+                $unique_ok=False;
+            }
+          
+        var_dump($unique_ok); 
         if ($unique_ok) {
              $success = Devedor::where('id',$id[1])->update($array_to_update);
              $mensagem = $_POST["nome"]." adicionado";
              $resultado = "success";
-
-             echo render_php(dirname(__DIR__, 2).'/views/message.php',
-            ['mensagem'=>$mensagem,
-            'resultado'=>$resultado]);
-         return $this->listDevedores(); 
-
-            
+  
          } 
          else{
             $mensagem =  "Cpf/Cnpj já adicionado";
-            $resultado = "danger";
-            var_dump($mensagem);
-            return die( "HTTP/1.0 404 Not Found" );
+            $resultado = "danger"; 
+            
          }
+
+         echo render_php(dirname(__DIR__, 2).'/views/message.php',
+            ['mensagem'=>$mensagem,
+            'resultado'=>$resultado]);
+
+         return $this->listDevedores();
+
         
     }
 
@@ -152,9 +166,19 @@ class DevedorController extends HomeController
     public function delete($id){
 
         $path = dirname(__DIR__, 2).'/views/devedor.php';
-        var_dump($id);
-        Devedor::destroy($id);
-        echo $id." deleted";
+        $success = Devedor::destroy($id);
+        if ($success) {
+            $mensagem = "Usuário deletado";
+            $resultado = "success";
+        }
+        else{
+            $mensagem = "Usuário não deletado";
+            $resultado = "danger";
+        }
+        echo render_php(dirname(__DIR__, 2).'/views/message.php',
+            ['mensagem'=>$mensagem,
+            'resultado'=>$resultado]);
+ 
     }
 
     public function dashboard(){

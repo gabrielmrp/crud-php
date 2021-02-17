@@ -3,11 +3,11 @@
     <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header d-block">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modalLabel">Excluir Item</h4>
+                    <h4 class="modal-title" id="modalLabel">Excluir <?=str_replace("es", "", $args['entity_verbose']);?></h4>
                 </div>
-                <div class="modal-body">Deseja realmente excluir este item? </div>
+                <div class="modal-body">Deseja realmente excluir? </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="del">Sim</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">N&atilde;o</button>
@@ -77,8 +77,12 @@
                                         <div class="form-group">
                                            <?php if($value != 'hidden' ){?>
                                                <label><?=$args['verbose_name'][$key]?></label>
-                                           <?php } ?>
-                                           <input type="<?=$value?>" placeholder="" name="<?=$key?>" value="" id="<?=$value?>" class="form-control" >
+                                           <?php } 
+                                            if($key=='devedor_id'){ 
+                                                $input_value=$args['ref_devedor'];}
+                                            else{$input_value="";}
+                                           ?>
+                                           <input type="<?=$value?>" placeholder="" name="<?=$key?>" value="<?=$input_value?>" id="<?=$value?>" class="form-control" >
                                        </div>
                                    <?php } ?>
                                    <div class="form-group">

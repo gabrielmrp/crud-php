@@ -1,7 +1,7 @@
 <?php 
 
 use Illuminate\Database\Capsule\Manager;
-
+ 
 $capsule = new Manager;
 
 #Manager::table('DROP TABLE IF EXISTS `users`;');
@@ -24,6 +24,7 @@ Manager::schema()->create('dividas',
 	    $table->string('descricao',64)->default('');
 	    $table->integer('valor')->default(0);
 	    $table->date('data_de_vencimento')->default('2099-12-31 00:00:00');
+	    $table->timestamp('updated')->nullable();
 	    $table->integer('devedor_id')->unsigned();
 	    $table->foreign('devedor_id')->references('id')->on('devedores')->onDelete('cascade');   
 });							
@@ -35,12 +36,14 @@ Manager::insert('INSERT INTO `devedores` (`nome`, `cpf_ou_cnpj`, `data_de_nascim
   ("Madeireira Campos", "65432101234567","","Rua Luiz Melodia 21, Belo Horizonte, MG, Brasil" ),
   ("Envitec LTDA",  "12327495843218","","Rua Francisco Sales 800, São Paulo, SP, Brasil"); ');
 
-Manager::insert('INSERT INTO `dividas` (`descricao`, `valor`, `data_de_vencimento`,`devedor_id`) VALUES
-  ("Nota Promissória código 1923", 1000, "2021-09-01",1),
-  ("Nota Promissória código 2021",  2000,"2021-07-01",2),
-  ("Nota Promissória código 2013",  3000,"2021-06-01",3),
-  ("Nota Promissória código 2045", 10000,"2022-01-01",4),
-  ("Nota Promissória código 2034",  20000,"2022-09-01",4); ');
+$now = date('Y-m-d h:i:s', time());
+  
+Manager::insert('INSERT INTO `dividas` (`descricao`, `valor`, `data_de_vencimento`,`devedor_id`,`updated`) VALUES
+  ("Nota Promissória código 1923", 1000, "2021-09-01",1,"'.$now.'"),
+  ("Nota Promissória código 2021",  2000,"2021-07-01",2,"'.$now.'"),
+  ("Nota Promissória código 2013",  3000,"2021-06-01",3,"'.$now.'"),
+  ("Nota Promissória código 2045", 10000,"2022-01-01",4,"'.$now.'"),
+  ("Nota Promissória código 2034",  20000,"2022-09-01",4,"'.$now.'"); ');
 
 echo "Migration completa";
 
