@@ -58,19 +58,21 @@ $('.editItem').click(function() {
 	var selected_node = $("#"+entity+"-"+itemid);
 
 	var inputs='';
+	 
 $(selected_node).find('li').each( function(){
 
+key = $(this).attr('key');
 var input_type = $(this).attr('input_type')
 var verbose_content = $(this).attr('input_type')=='hidden'?'':$(this).attr('verbose_key')+": "
 
-
-inputs+="<div class='form-group row my-0'>"+
+if(key!=='pessoa')
+inputs+="<div class='form-group row my-0' id='"+key+"'>"+
 		"<div class='col-sm-6'>"+
 		"<label>"+verbose_content+"</label>"+
 		"</div>"+
 		"<div class='col-sm-6'>"+
 		"<span class=''>"+
-		"<input class='form-control' type='"+input_type+"' name='"+$(this).attr('key')+"' value='"+$(this).attr('value')+"'>"+
+		"<input class='form-control' type='"+input_type+"' name='"+key+"' value='"+$(this).attr('value')+"'>"+
 		"</input>"+
 		"</span>"+
 		"</div>"+
@@ -89,23 +91,35 @@ $(this).hide();
 
 $('button#'+entity+"-"+itemid).click(function(){
 	form = $("#editform");
- 	form.submit();
- $.ajax({ 
-	    type: 'POST',
-	    url: form.attr('action'), 
-	    data: form.serialize(), 
-	    complete: function(result) {
 
-	    	if(result.responseText.search("Cpf/Cnpj já adicionado")>-1)
-	    		{	
-	    			$('#editform').find($('input[name ="cpf_ou_cnpj"]')).css({'border-color':'red'});
-                    $( "<small class='error-msg'>Cpf/Cnpj já existe<br /></small>" ).insertAfter( $('#editform').find($('input[name ="cpf_ou_cnpj"]')));
-                }
-            else{
-            	 location.reload();
-            }
-        }
-	}); 
+
+	if(entity=='devedor' && $("#editform").find($('input[name ="cpf_ou_cnpj"]')).val().length != 11 && 
+		$("#editform").find($('input[name ="cpf_ou_cnpj"]')).val().length != 14)
+		{
+		 $( "<small class='error-msg'>Cpf/Cnpj com número incorreto de caracteres<br /></small>" ).insertAfter( $('#editform').find($('input[name ="cpf_ou_cnpj"]')));
+	
+		}
+
+		else{
+
+		 	form.submit();
+		 $.ajax({ 
+			    type: 'POST',
+			    url: form.attr('action'), 
+			    data: form.serialize(), 
+			    complete: function(result) {
+
+			    	if(entity=='devedor' && result.responseText.search("Cpf/Cnpj já adicionado")>-1)
+			    		{	
+			    			$('#editform').find($('input[name ="cpf_ou_cnpj"]')).css({'border-color':'red'});
+		                    $( "<small class='error-msg'>Cpf/Cnpj já existe<br /></small>" ).insertAfter( $('#editform').find($('input[name ="cpf_ou_cnpj"]')));
+		                }
+		            else{
+		            	 location.reload();
+		            }
+		        }
+			}); 
+}
 });
  
 });

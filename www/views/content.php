@@ -4,8 +4,11 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header d-block">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modalLabel">Excluir <?=str_replace("es", "", $args['entity_verbose']);?></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modalLabel">Excluir <?=str_replace("es", "", $args['entity_verbose']);?> 
+                    </h4>
                 </div>
                 <div class="modal-body">Deseja realmente excluir? </div>
                 <div class="modal-footer">
@@ -30,19 +33,35 @@
                         <div class="card mb-4">
                             <div class="card-header d-inline-flex">
                                 <div class="col-md-8 info" id="<?=$args['entity'].'-'.$item['id']?>">
-                                        <ul class="card-header"> 
-                                            <?php foreach ($item as $column_name => $column_value) { ?>
-                                                <li verbose_key='<?=$args['verbose_name'][$column_name]?>' key='<?=$column_name?>' value='<?=$column_value?>' input_type='<?=$args['input_types'][$column_name]?>' class='<?=$args['input_types'][$column_name]?>'><?=$args['verbose_name'][$column_name]." : <span class='itemvalue'>".$column_value."</span>";?>  
+                                    <ul class="card-header"> 
+                                        <?php 
+                                        foreach ($item as $column_name => $column_value) 
+                                            { 
+                                            if(!($item['pessoa']==='Jurídica' && $column_name === 'data_de_nascimento'))
+                                            {   
+                                            ?>
+                                            <li 
+                                                verbose_key='<?=$args['verbose_name'][$column_name]?>' 
+                                                key='<?=$column_name?>' 
+                                                value='<?=$column_value?>' 
+                                                input_type='<?=$args['input_types'][$column_name]?>' class='<?=$args['input_types'][$column_name]?>'>
+                                                    <?=$args['verbose_name'][$column_name]." : <span class='itemvalue'>".$column_value."</span>";?>  
                                             </li> 
-                                        <?php } ?>
+
+                                            <?php 
+                                            } 
+                                            
+                                            } ?>
                                     </ul>
-                                </div>
-                                
+                                </div>                                
                                 <div class=col-md-4>
                                     <div class="actions d-inline-flex p-1 text-white">
-                                        <?php if($args['entity'] == 'devedores' ){?>
-                                        <a class="btn btn-success btn-xs mx-2 viewItem" href="../devedor/<?=$item['id'] ?>">&#128065;</a>
-                                            <?php } ?>
+                                        <?php 
+                                        if($args['entity'] == 'devedores' )
+                                        {?>
+                                            <a class="btn btn-success btn-xs mx-2 viewItem" href="../devedor/<?=$item['id'] ?>">&#128065;</a>
+                                        <?php 
+                                        } ?>
                                          <a class="btn btn-warning btn-xs mx-2 editItem" itemid="<?=$item['id']?>" entity="<?=$args['entity']?>">&#128393;</a>
                                          <a class="btn btn-danger btn-xs mx-2 delItem"  href="#" data-toggle="modal" data-target="#delete-modal" itemid="<?=$item['id']?>" entity="<?=$args['entity']?>">&#128465;</a>
                                     </div>
@@ -52,8 +71,12 @@
                     </div> 
                 </div>
             <? } #endfor ?>
-        <?php } ?>
-        <?php if($args['entity']!=='devedor'){?>
+        <?php 
+        } ?>
+        <?php 
+        if($args['entity']!=='devedor')
+        {
+        ?>
         <div class="row"> 
             <div class="col-md-1 mb-3">  
              <div class="card">                      
@@ -73,33 +96,49 @@
                         <div class="card-body">
                             <form action="/<?=$args['entity']?>" method="post" enctype="multipart/form-data" id="form">
                                 <fieldset> 
-                                    <?php foreach($args['input_types'] as $key => $value){?>
+                                    <?php foreach($args['input_types'] as $key => $value)
+                                    {
+                                    ?>
                                         <div class="form-group">
-                                           <?php if($value != 'hidden' ){?>
+                                           <?php 
+                                           if($value != 'hidden' && $key!=='pessoa' )
+                                           {
+                                            ?>
                                                <label><?=$args['verbose_name'][$key]?></label>
-                                           <?php } 
-                                            if($key=='devedor_id'){ 
-                                                $input_value=$args['ref_devedor'];}
-                                            else{$input_value="";}
-                                           ?>
-                                           <input type="<?=$value?>" placeholder="" name="<?=$key?>" value="<?=$input_value?>" id="<?=$value?>" class="form-control" >
+                                            <?php 
+                                            } 
+                                            if($key=='devedor_id')
+                                            { 
+                                                $input_value=$args['ref_devedor'];
+                                            }
+                                            else
+                                            {
+                                                $input_value="";
+                                            }
+
+                                            if($key!=='pessoa')
+                                            { 
+                                           ?> 
+                                                <input type="<?=$value?>" placeholder="" name="<?=$key?>" value="<?=$input_value?>" id="<?=$value?>" class="form-control" >
+                                            <?php 
+                                            }?>
                                        </div>
-                                   <?php } ?>
+                                   <?php 
+                                    }
+                                    ?>
                                    <div class="form-group">
-                                    <button type="submit" class="btn btn-primary js-tooltip" id=  />Adicionar
-                                    </button>
+                                        <button type="submit" class="btn btn-primary js-tooltip" id=  />Adicionar
+                                        </button>
                                     </div>
                                 </fieldset>
-                        </form>
-                    </div>
-                    <div class="card-footer">                        
+                            </form>
+                        </div> 
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     <? }?>
-</div>
-</div>
+    </div>
+    </div>
 </div>
 </div>

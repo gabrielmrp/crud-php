@@ -23,21 +23,21 @@ include(dirname(__DIR__, 1).'/views/footer.php');
 		<div class="col-md-12">
 			<div class="row">
 				<div class="col-md-6 slot p-5">
-					<h5>Clientes por Tipo de Pessoa</h5>
+					<h5>Nº de Clientes por Tipo de Pessoa</h5>
 					<div id="s1"></div>
 				</div>
 				<div class="col-md-6 slot p-5">
-					<h5>Dívidas por Tipo de Pessoa</h5>
+					<h5>Montante de Dívidas por Tipo de Pessoa</h5>
 					<div id="s2"></div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6 slot p-5">
-					<h5>Dívidas por Cliente</h5>
+					<h5>Montante de Dívidas por Cliente</h5>
 					<div id="s3"></div>
 				</div>
 				<div class="col-md-6 slot p-5">
-					<h5>Valores por Data de Vencimento</h5>
+					<h5>Montante de Dívidas por Data de Vencimento</h5>
 					<div id="s4"></div>
 				</div>
 				 
@@ -64,7 +64,10 @@ include(dirname(__DIR__, 1).'/views/footer.php');
 			x: {
 				type: 'timeseries',
 				tick: {
-					format: '%Y-%m-%d'
+					format: '%d/%m/%Y',
+	                rotate: 75,
+	                multiline: false
+	             
 				}
 			}
 		}

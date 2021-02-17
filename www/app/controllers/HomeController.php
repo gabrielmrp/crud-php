@@ -14,10 +14,7 @@ function render_php($path,$args){
 
 class HomeController
 {
-    public function hello($params)
-    {
-        return "Olá {$params[1]}";
-    }
+    
 
     public static function render_php($path,$args)
     {
@@ -31,6 +28,12 @@ class HomeController
 	public static function migrate()
     {
     	$path = dirname(__DIR__, 2).'/migrate.php';
+	    include($path);
+	} 
+
+	public static function error404()
+    {
+    	$path = dirname(__DIR__, 2).'/404.php';
 	    include($path);
 	} 
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Capsule\Manager;
  
 $capsule = new Manager;
 
-#Manager::table('DROP TABLE IF EXISTS `users`;');
+#esquema
 
 Manager::schema()->dropIfExists('dividas');				
 Manager::schema()->dropIfExists('devedores');
@@ -28,6 +28,10 @@ Manager::schema()->create('dividas',
 	    $table->integer('devedor_id')->unsigned();
 	    $table->foreign('devedor_id')->references('id')->on('devedores')->onDelete('cascade');   
 });							
+
+
+#seeds 
+
 
 Manager::insert('INSERT INTO `devedores` (`nome`, `cpf_ou_cnpj`, `data_de_nascimento`,`endereco`) VALUES
   ("João Cruz", "19382749582", "1976-02-01","Rua Cuíra 234, Caeté, MG, Brasil"),
