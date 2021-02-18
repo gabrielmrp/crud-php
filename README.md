@@ -20,13 +20,13 @@ Faça a instalação do sistema através do comando abaixo
 $ docker-compose up --build
 ```
  
-
 Encontre o ip da máquina virtual (X.X.X.X)
 
 ```
 $ docker-machine ip default
 ```
  
+- Acessando o site:
 
 Caso queira fazer a migração dos bancos de dados bem como a população do mesmo o comando é o seguinte:
 
@@ -46,7 +46,7 @@ Se quiser posteriormente fazer a população:
 X.X.X.X/populate
 ```
 
-Caso não opte por migrar e popular o banco de dados o acesso ao site é dado pelo link: 
+Caso não opte por migrar e popular o banco de dados, o acesso ao sistema é dado pelo link: 
 ```
 X.X.X.X
 ```

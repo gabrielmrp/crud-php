@@ -29,7 +29,5 @@ Manager::schema()->create('dividas',
 	    $table->foreign('devedor_id')->references('id')->on('devedores')->onDelete('cascade');   
 });							
 
-
-#seeds 
  
 

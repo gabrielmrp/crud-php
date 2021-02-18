@@ -45,13 +45,10 @@ class DevedorController extends HomeController
     {
     	$path = dirname(__DIR__, 2).'/views/devedores.php';
          
-        $elements = Devedor::all()->toArray();
-
-        foreach ($elements as $key => $value) {
-           $elements[$key]['pessoa']= 
-           strlen($elements[$key]['cpf_ou_cnpj'])===11?
-           "Física":"Jurídica";
-        } 
+         
+        $elements = Devedor::insert_pessoa(
+                    Devedor::all()->toArray()
+                    );
 
         $args = [
             'elements'=>$elements,
@@ -61,7 +58,7 @@ class DevedorController extends HomeController
             'entity_verbose'=>'devedores'
         ]; 
          
-        return render_php($path,$args);
+        return $this->render_php($path,$args);
     }
 
     public function get($id)
@@ -71,11 +68,15 @@ class DevedorController extends HomeController
        
          
         $ref_devedor = Devedor::find($id)->first()->toArray()['id'];
+
+        $elements = Devedor::insert_pessoa(
+                    Devedor::find($id)->toArray()
+                    );
          
 
         $args = [
                 'devedor'=>[
-                            'elements'=>Devedor::find($id)->toArray(),
+                            'elements'=>$elements,
                             'entity'=>'devedor',
                             'entity_verbose'=>'devedor',
                             'verbose_name'=>$this->verbose_name,
@@ -91,7 +92,7 @@ class DevedorController extends HomeController
                             ]
                 ];
           
-        return render_php($path,$args);
+        return $this->render_php($path,$args);
  
     }
 
@@ -99,6 +100,7 @@ class DevedorController extends HomeController
     {
          $path = dirname(__DIR__, 2).'/views/devedores.php';          
          
+         #Checagem de cpf/cnpj único
          $unique_ok =  
          (Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first() === null);
 
@@ -112,7 +114,7 @@ class DevedorController extends HomeController
             $mensagem =  "Cpf/Cnpj já adicionado";
             $resultado = "danger";
          }
-        echo render_php(dirname(__DIR__, 2).'/views/message.php',
+        echo $this->render_php(dirname(__DIR__, 2).'/views/message.php',
             ['mensagem'=>$mensagem,
             'resultado'=>$resultado]);
 
@@ -131,36 +133,31 @@ class DevedorController extends HomeController
           
          #Checagem de cpf/cnpj único
          $found = Devedor::where('cpf_ou_cnpj','=',$_POST['cpf_ou_cnpj'])->first();
-
-         
+         echo "<script>alert($found)</script>";
+         $unique_ok = True;
          if($found!==null)
             if($id[1] !== (string)$found['id']){
                 $unique_ok=False;
             }
-            else{
-                $unique_ok = True;
-            }
-  
 
-        if ($unique_ok) {
+ 
+        if ($unique_ok==True) {
              $success = Devedor::where('id',$id[1])->update($array_to_update);
              $mensagem = "Informações de ".$_POST["nome"]." alteradas";
              $resultado = "success";
   
          } 
          else{
-            $mensagem =  "Cpf/Cnpj já adicionado";
-            $resultado = "danger"; 
+             $mensagem =  "Cpf/Cnpj já adicionado";
+             $resultado = "danger"; 
             
          }
 
-         echo render_php(dirname(__DIR__, 2).'/views/message.php',
+         echo $this->render_php(dirname(__DIR__, 2).'/views/message.php',
             ['mensagem'=>$mensagem,
             'resultado'=>$resultado]);
 
-         return $this->listDevedores();
-
-        
+         echo $this->listDevedores(); 
     }
 
 
@@ -176,43 +173,21 @@ class DevedorController extends HomeController
             $mensagem = "Usuário não deletado";
             $resultado = "danger";
         }
-        echo render_php(dirname(__DIR__, 2).'/views/message.php',
+        echo $this->render_php(dirname(__DIR__, 2).'/views/message.php',
             ['mensagem'=>$mensagem,
             'resultado'=>$resultado]);
  
     }
 
     public function dashboard(){
+
         $path = dirname(__DIR__, 2).'/views/dashboard.php';
-        $devedores_juridica = Devedor::whereRaw('LENGTH(cpf_ou_cnpj) = 14')->count();
-        $devedores_fisica = Devedor::whereRaw('LENGTH(cpf_ou_cnpj) = 11')->count();
+ 
+        $Divida = new Divida();
+        $Devedor = new Devedor();
 
-        $dividas_pessoa_juridica = Devedor::selectRaw("IF(SUM(valor) IS NULL,0,SUM(valor)) as Total")
-                            ->leftJoin('dividas','dividas.devedor_id','=','devedores.id')
-                            ->whereRaw('LENGTH(cpf_ou_cnpj) = 14') 
-                            ->get()
-                            ->first()['Total'];  
-
-        $dividas_pessoa_fisica = Devedor::selectRaw("IF(SUM(valor) IS NULL,0,SUM(valor)) as Total")
-                            ->leftJoin('dividas','dividas.devedor_id','=','devedores.id')
-                            ->whereRaw('LENGTH(cpf_ou_cnpj) = 11') 
-                            ->get()
-                            ->first()['Total'];          
-         
-        $devedor_valores = Devedor::select("nome")
-                            ->selectRaw("IF(SUM(valor) IS NULL,0,SUM(valor)) as Total")
-                            ->leftJoin('dividas','dividas.devedor_id','=','devedores.id')
-                            ->groupBy('nome')
-                            ->orderBy('Total','DESC')
-                            ->get()
-                            ->toArray();
-
-        $vencimento_valores = Divida::select("data_de_vencimento")
-                            ->selectRaw("IF(SUM(valor) IS NULL,0,SUM(valor)) as Total") 
-                            ->groupBy('data_de_vencimento')
-                            ->orderBy('Total','DESC')
-                            ->get()
-                            ->toArray();                    
+        $devedor_valores = $Devedor->get_devedor_valores(); 
+        $vencimento_valores = $Divida->get_vencimento_valores();  
 
          // Rotinas para formatação para a correta inserção de dados nos gráficos                   
          $k=[];
@@ -231,12 +206,12 @@ class DevedorController extends HomeController
                 'dashboard'=>
                     [
                         'pessoa'=>[
-                            'Jurídica'=>$dividas_pessoa_juridica,
-                            'Física'=>$dividas_pessoa_fisica
+                            'Jurídica'=>$Devedor->get_dividas_pessoa_juridica(),
+                            'Física'=>$Devedor->get_dividas_pessoa_fisica()
                         ],
                         'dividas_pessoa'=>[
-                            'Jurídica'=>$devedores_juridica,
-                            'Física'=>$devedores_fisica
+                            'Jurídica'=>$Devedor->count_devedores_juridica(),
+                            'Física'=>$Devedor->count_devedores_fisica()
                         ],
 
                         'devedor_valores'=> json_encode($k),
@@ -244,6 +219,6 @@ class DevedorController extends HomeController
 
                     ]
             ];
-        return render_php($path,$args);
+        return $this->render_php($path,$args);
     }
 }

@@ -37,7 +37,7 @@
                                         <?php 
                                         foreach ($item as $column_name => $column_value) 
                                             { 
-                                            if(!($item['pessoa']==='Jurídica' && $column_name === 'data_de_nascimento'))
+                                            if(!($column_name==='data_de_nascimento' && $item['pessoa'] ==='Jurídica'))
                                             {   
                                             ?>
                                             <li 
@@ -45,7 +45,7 @@
                                                 key='<?=$column_name?>' 
                                                 value='<?=$column_value?>' 
                                                 input_type='<?=$args['input_types'][$column_name]?>' class='<?=$args['input_types'][$column_name]?>'>
-                                                    <?=$args['verbose_name'][$column_name]." : <span class='itemvalue'>".$column_value."</span>";?>  
+                                                    <?="<b>".$args['verbose_name'][$column_name]."</b> : <span class='itemvalue'>".$column_value."</span>";?>  
                                             </li> 
 
                                             <?php 

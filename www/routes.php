@@ -35,8 +35,7 @@ class Router
         
         $this->params = array_merge($_POST,["id"=>$id[1]]);
 
-    }
- 
+    } 
 
     public function delete(string $route, $action)
     { 

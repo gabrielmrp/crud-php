@@ -16,4 +16,15 @@ class Divida extends Model
     public $timestamps = false;
 
 
+    public function get_vencimento_valores(){
+
+    	return Divida::select("data_de_vencimento")
+                            ->selectRaw("IF(SUM(valor) IS NULL,0,SUM(valor)) as Total") 
+                            ->groupBy('data_de_vencimento')
+                            ->orderBy('Total','DESC')
+                            ->get()
+                            ->toArray(); 
+    }
+
+    
 }

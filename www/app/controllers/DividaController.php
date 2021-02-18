@@ -57,7 +57,7 @@ class DividaController extends HomeController
         
   
 
-        return render_php($path,$args);
+        return $this->render_php($path,$args);
     }
 
     public function insert()
@@ -71,15 +71,15 @@ class DividaController extends HomeController
         $resultado = "success";
             
           
-        echo render_php(dirname(__DIR__, 2).'/views/message.php',
+         /*echo $this->render_php(dirname(__DIR__, 2).'/views/message.php',
             ['mensagem'=>$mensagem,
-            'resultado'=>$resultado]);
+            'resultado'=>$resultado]);*/ 
+        echo "<script>window.reload();</script>";
   
     }
 
         public function update($id)
     {
-        //$path = dirname(__DIR__, 2).'/views/devedor.php';
           
          unset($_POST['submit']);
          $array_to_update = array_merge($_POST,["id"=>$id[1]]);
@@ -90,7 +90,7 @@ class DividaController extends HomeController
          $mensagem = $_POST["nome"]." adicionado";
          $resultado = "success";
 
-         echo render_php(dirname(__DIR__, 2).'/views/message.php',
+         echo $this->render_php(dirname(__DIR__, 2).'/views/message.php',
             ['mensagem'=>$mensagem,
             'resultado'=>$resultado]);
          return $this->listDividas(); 
@@ -100,7 +100,6 @@ class DividaController extends HomeController
      public function delete($id){
 
         $path = dirname(__DIR__, 2).'/views/divida.php';
-        var_dump($id);
         Divida::destroy($id);
         echo $id." deleted";
     }
